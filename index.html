@@ -6,10 +6,7 @@
   <title>JNTUA 3-2 Summary Result</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Roboto&display=swap" rel="stylesheet">
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
+    * { box-sizing: border-box; }
     body {
       font-family: 'Roboto', sans-serif;
       margin: 0;
@@ -17,88 +14,85 @@
       background: linear-gradient(to right, #f8f9fa, #dbe9ff);
       color: #333;
     }
-
     .container {
       max-width: 1200px;
       margin: auto;
       padding: 20px;
     }
-
     .header {
       text-align: center;
       padding: 20px 10px;
     }
-
     .header h1 {
       font-family: 'Montserrat', sans-serif;
       font-size: 2rem;
       color: #0A369D;
       margin: 0;
     }
-
     .header p {
       font-size: 1rem;
       color: #555;
       margin-top: 5px;
     }
+    .summary {
+      margin: 30px 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      gap: 20px;
+    }
+    .card {
+      flex: 1 1 200px;
+      background: white;
+      border-left: 6px solid #0A369D;
+      border-radius: 8px;
+      padding: 15px 20px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+    .card h3 {
+      margin: 0;
+      font-size: 1.1rem;
+    }
+    .card.pass { border-left-color: green; }
+    .card.fail { border-left-color: red; }
+    .card.detained { border-left-color: orange; }
 
     .table-wrapper {
       overflow-x: auto;
       background: white;
       border-radius: 12px;
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-      margin-top: 30px;
+      margin-top: 10px;
     }
-
     table {
       width: 100%;
       border-collapse: collapse;
       min-width: 600px;
     }
-
     th, td {
       padding: 12px 16px;
       text-align: center;
       border-bottom: 1px solid #ddd;
     }
-
     th {
       background-color: #0A369D;
       color: white;
       font-weight: 600;
     }
-
     tr:hover {
       background-color: #f1f1f1;
     }
-
-    .pass {
-      color: green;
-      font-weight: bold;
-    }
-
-    .fail {
-      color: red;
-      font-weight: bold;
-    }
-
-    .detained {
-      color: orange;
-      font-weight: bold;
-    }
+    .pass { color: green; font-weight: bold; }
+    .fail { color: red; font-weight: bold; }
+    .detained { color: orange; font-weight: bold; }
 
     @media (max-width: 768px) {
-      .header h1 {
-        font-size: 1.4rem;
-      }
-      .header p {
-        font-size: 0.9rem;
-      }
+      .header h1 { font-size: 1.4rem; }
+      .header p { font-size: 0.9rem; }
     }
   </style>
 </head>
 <body>
-
   <div class="container">
     <div class="header">
       <h1>MOTHER THERESA INSTITUTE OF ENGINEERING AND TECHNOLOGY</h1>
@@ -106,8 +100,12 @@
       <h2 style="color:#0A369D; margin-top: 10px;">JNTUA 3-2 Results Summary (April/May 2025)</h2>
     </div>
 
+    <!-- 👇 Summary moved up -->
+    <div class="summary" id="summary"></div>
+
+    <!-- 👇 Table section -->
     <div class="table-wrapper">
-      <table>
+      <table id="resultsTable">
         <thead>
           <tr>
             <th>Roll Number</th>
@@ -115,6 +113,8 @@
           </tr>
         </thead>
         <tbody>
+          <!-- Your student data goes here (already in previous content) -->
+           <tbody>
           <tr><td>22HR1A0566</td><td class="pass">All Pass</td></tr>
           <tr><td>22HR1A0567</td><td class="pass">All Pass</td></tr>
           <tr><td>22HR1A0568</td><td class="fail">Machine Learning, Introduction to Environmental Economics</td></tr>
@@ -184,9 +184,37 @@
           <tr><td>23HR5A0505</td><td class="pass">All Pass</td></tr>
           <tr><td>23HR5A0506</td><td class="fail">Introduction to Environmental Economics</td></tr>
         </tbody>
+        </tbody>
       </table>
     </div>
   </div>
 
+  <script>
+    const table = document.getElementById("resultsTable");
+    const rows = table.querySelectorAll("tbody tr");
+    let pass = 0, fail = 0, detained = 0;
+    rows.forEach(row => {
+      const result = row.children[1];
+      if (result.classList.contains("pass")) pass++;
+      else if (result.classList.contains("fail")) fail++;
+      else if (result.classList.contains("detained")) detained++;
+    });
+    const total = pass + fail + detained;
+    const summaryHTML = `
+      <div class="card pass">
+        <h3>✅ Pass: ${pass} (${((pass/total)*100).toFixed(2)}%)</h3>
+      </div>
+      <div class="card fail">
+        <h3>❌ Fail: ${fail} (${((fail/total)*100).toFixed(2)}%)</h3>
+      </div>
+      <div class="card detained">
+        <h3>⛔ Detained: ${detained} (${((detained/total)*100).toFixed(2)}%)</h3>
+      </div>
+      <div class="card">
+        <h3>📊 Total Students: ${total}</h3>
+      </div>
+    `;
+    document.getElementById("summary").innerHTML = summaryHTML;
+  </script>
 </body>
 </html>
